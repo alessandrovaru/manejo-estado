@@ -1,49 +1,77 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react';
 
-const SECURITY_CODE = '123xxx'
+const SECURITY_CODE = 'paradigma';
 
-const UseState = () => {
-  const [value, setValue] = useState('second')
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+function UseState({ name }) {
+  const [state, setState] = React.useState({
+    value: '',
+    error: false,
+    loading: false,
+  });
 
-  useEffect(() => {
-    console.log('Starting the effect');
-    if (loading) {
-      setError(false);
+  console.log(state)
+
+  React.useEffect(() => {
+    console.log("Empezando el efecto")
+
+    if (!!state.loading) {
       setTimeout(() => {
-        console.log('Doing the validation');
-        if (value === SECURITY_CODE) {
-          setLoading(false);
-          
+        console.log("Haciendo la validación")
+  
+        if (state.value === SECURITY_CODE) {
+          setState({
+            ...state,
+            error: false,
+            loading: false,
+          });
         } else {
-          setLoading(false);
-          setError(true);
+          setState({
+            ...state,
+            error: true,
+            loading: false,
+          });
         }
         
-        console.log('Validated')
+        console.log("terminando la validación")
       }, 3000);
     }
-    console.log('End of effect');
-  }, [loading])
-
+    
+    console.log("Terminando el efecto")
+  }, [state.loading]);
   
   return (
-    <>
-      <h2>Eliminar ClassState</h2>
-      {error && <> No coincide</>}
-      {loading && <> Cargando...</>}
-      <p>Por favor, escribe el code de seguridad</p>
-      <input 
-        placeholder='Codigo de seguridad' 
-        value={value} 
-        onChange={(event)=>{
-          setValue(event.target.value);
-        }} 
+    <div>
+      <h2>Eliminar {name}</h2>
+      
+      <p>Por favor, escribe el código de seguridad.</p>
+
+      {(state.error && !state.loading) && (
+        <p>Error: el código es incorrecto</p>
+      )}
+      {state.loading && (
+        <p>Cargando...</p>
+      )}
+
+      <input
+        placeholder="Código de seguridad"
+        value={state.value}
+        onChange={(event) => {
+          setState({
+            ...state,
+            value: event.target.value,
+          });
+        }}
       />
-      <button onClick={()=>{setLoading(true)}}>Try</button>
-    </>
-  )
+      <button
+        onClick={() => {
+          setState({
+            ...state,
+            loading: true,
+          });
+        }}
+      >Comprobar</button>
+    </div>
+  );
 }
 
-export { UseState }; 
+export { UseState };
