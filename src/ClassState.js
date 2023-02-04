@@ -71,7 +71,7 @@ class ClassState extends React.Component {
             }}
           />
           <button
-            onClick={() => this.setState({ loading: true })}
+            onClick={() => this.setState({ ...this.state, loading: true })}
           >Comprobar</button>
         </div>
       );
