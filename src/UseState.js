@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loading } from './Loading';
-const SECURITY_CODE = 'paradigmas';
+const SECURITY_CODE = 'paradigma';
 
 function UseState( props ) {
   const [state, setState] = React.useState({
