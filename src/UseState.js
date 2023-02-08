@@ -11,7 +11,49 @@ function UseState( props ) {
     confirmed: false,
   });
 
-  console.log(state)
+  const onConfirm = () => {
+    setState({ 
+      error: false, 
+      loading: false,
+      confirmed: true,
+    });
+  }
+
+  const onError = () => {
+    setState({ 
+      error: true, 
+      loading: false 
+    });
+  };
+
+  const onWrite = (newValue) => {
+    setState({ 
+      value: newValue 
+    });
+  }
+
+  const onCheck = () => {
+    setState({ 
+      ...state, 
+      loading: true 
+    });
+  }
+
+  const onDelete = () => {
+    setState({
+      ...state, 
+      deleted: true
+    });
+  }
+
+  const onReset = () => {
+    setState({
+      ...state, 
+      confirmed: false,
+      deleted: false,
+      value: '',
+    });
+  }
 
   React.useEffect(() => {
     console.log("Empezando el efecto")
@@ -20,13 +62,9 @@ function UseState( props ) {
         console.log("Haciendo la validación")
   
         if (SECURITY_CODE === state.value) {
-          setState({ 
-            error: false, 
-            loading: false,
-            confirmed: true,
-          });
+          onConfirm();
         } else {
-          setState({ error: true, loading: false });
+          onError();
         }
         
         console.log("terminando la validación")
@@ -54,11 +92,11 @@ function UseState( props ) {
           placeholder="Código de seguridad"
           value={state.value}
           onChange={(event) => {
-            setState({ value: event.target.value });
+            onWrite(event.target.value);
           }}
         />
         <button
-          onClick={() => setState({ ...state, loading: true })}
+          onClick={() => onCheck()}
         >Comprobar</button>
       </div>
     );
@@ -68,19 +106,12 @@ function UseState( props ) {
         <p>We ask for a confirmation, are you sure?</p>
         <button 
           onClick={() => {
-            setState({
-              ...state, 
-              deleted: true
-            });
+            onDelete();
           }}
         >Yeah</button>
         <button 
           onClick={() => {
-            setState({
-              ...state, 
-              confirmed: false,
-              value: '',
-            });
+            onReset();
           }}
         >Nope</button>
       </>
@@ -91,12 +122,7 @@ function UseState( props ) {
         <p>eliminado con exito</p>
         <button 
           onClick={() => {
-            setState({
-              ...state, 
-              confirmed: false,
-              deleted: false,
-              value: '',
-            });
+            onReset();
           }}
         >Reset</button>
       </>
